@@ -1,0 +1,11 @@
+.{
+  .name = "phantom.template.module",
+  .version = "0.1.0",
+  .paths = .{"."},
+  .dependencies = .{
+    .phantom = .{
+      .url = "https://github.com/PhantomUIx/core/archive/e35c03d6da9ce120e19c462b96c47a0a927dc1e8.tar.gz",
+      .hash = "12204a0cbd71f4d4a6748a71a418ae8b92038027a627d6abd72359a1528de6e398ab",
+    },
+  },
+}
