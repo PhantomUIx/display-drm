@@ -1,7 +1,11 @@
 const std = @import("std");
 const Phantom = @import("phantom");
 
-pub const phantomModule = Phantom.Sdk.PhantomModule{};
+pub const phantomModule = Phantom.Sdk.PhantomModule{
+    .provides = .{
+        .displays = &.{"drm"},
+    },
+};
 
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
@@ -11,18 +15,27 @@ pub fn build(b: *std.Build) void {
     const no_tests = b.option(bool, "no-tests", "skip generating tests") orelse false;
     const scene_backend = b.option(Phantom.SceneBackendType, "scene-backend", "The scene backend to use for the example") orelse .headless;
 
+    const vizops = b.dependency("vizops", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
     const phantom = b.dependency("phantom", .{
         .target = target,
         .optimize = optimize,
         .@"no-importer" = no_importer,
     });
 
-    const module = b.addModule("phantom.template.module", .{
+    const module = b.addModule("phantom.display.drm", .{
         .source_file = .{ .path = b.pathFromRoot("src/phantom.zig") },
         .dependencies = &.{
             .{
                 .name = "phantom",
                 .module = phantom.module("phantom"),
+            },
+            .{
+                .name = "vizops",
+                .module = vizops.module("vizops"),
             },
         },
     });
@@ -39,8 +52,9 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     exe_example.addModule("phantom", phantom.module("phantom"));
-    exe_example.addModule("phantom.template.module", module);
+    exe_example.addModule("phantom.display.drm", module);
     exe_example.addModule("options", exe_options.createModule());
+    exe_example.addModule("vizops", vizops.module("vizops"));
     b.installArtifact(exe_example);
 
     if (!no_tests) {
@@ -55,6 +69,7 @@ pub fn build(b: *std.Build) void {
         });
 
         unit_tests.addModule("phantom", phantom.module("phantom"));
+        unit_tests.addModule("vizops", vizops.module("vizops"));
 
         const run_unit_tests = b.addRunArtifact(unit_tests);
         step_test.dependOn(&run_unit_tests.step);

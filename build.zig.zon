@@ -1,11 +1,15 @@
 .{
-  .name = "phantom.template.module",
+  .name = "phantom.display.drm",
   .version = "0.1.0",
   .paths = .{"."},
   .dependencies = .{
     .phantom = .{
-      .url = "https://github.com/PhantomUIx/core/archive/e35c03d6da9ce120e19c462b96c47a0a927dc1e8.tar.gz",
-      .hash = "12204a0cbd71f4d4a6748a71a418ae8b92038027a627d6abd72359a1528de6e398ab",
+      .url = "https://github.com/PhantomUIx/core/archive/c1fa830321b81530007511dc601b12004c7c9a33.tar.gz",
+      .hash = "122053a3b8a5f8130f40aa2b656f41e90348a876f839baddc8f9570844e0c74dc870",
+    },
+    .vizops = .{
+      .url = "https://github.com/MidstallSoftware/vizops/archive/8b8499e195d8cf66e9b13ed1c80b24ee27420a29.tar.gz",
+      .hash = "1220f478cda5edf75a0b837e04c741631e4136e422b4257ccbd09d4cccaf736ac312",
     },
   },
 }
