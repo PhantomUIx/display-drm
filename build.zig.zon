@@ -11,5 +11,9 @@
       .url = "https://github.com/MidstallSoftware/vizops/archive/8b8499e195d8cf66e9b13ed1c80b24ee27420a29.tar.gz",
       .hash = "1220f478cda5edf75a0b837e04c741631e4136e422b4257ccbd09d4cccaf736ac312",
     },
+    .libdrm = .{
+      .url = "https://github.com/MidstallSoftware/libdrm.zig/archive/0ee2e521a3b96888c1029fefb2335b6076780aac.tar.gz",
+      .hash = "1220c832f1b2cca5fe49d23f44bc59b9bee591fcaf768314596243b48bf659f226d3",
+    },
   },
 }
