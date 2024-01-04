@@ -105,14 +105,20 @@ fn impl_info(ctx: *anyopaque) anyerror!phantom.display.Output.Info {
     const connector = try self.node.getConnector(self.connectorId);
     defer connector.deinit(self.display.allocator);
 
-    const encoder = try self.node.getEncoder(connector.encoderId);
-    const crtc = try self.node.getCrtc(encoder.crtcId);
+    var res = vizops.vector.UsizeVector2.zero();
+
+    if (self.node.getEncoder(connector.encoderId) catch null) |encoder| {
+        if (self.node.getCrtc(encoder.crtcId) catch null) |crtc| {
+            res.value[0] = crtc.mode.hdisplay;
+            res.value[1] = crtc.mode.vdisplay;
+        }
+    }
 
     return .{
         .enable = connector.connection > 0,
         .size = .{
             .phys = .{ .value = .{ @floatFromInt(connector.mmWidth), @floatFromInt(connector.mmHeight) } },
-            .res = .{ .value = .{ crtc.mode.hdisplay, crtc.mode.vdisplay } },
+            .res = res,
         },
         .scale = self.scale,
         .name = self.name,
