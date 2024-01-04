@@ -12,8 +12,12 @@
       .hash = "1220f478cda5edf75a0b837e04c741631e4136e422b4257ccbd09d4cccaf736ac312",
     },
     .libdrm = .{
-      .url = "https://github.com/MidstallSoftware/libdrm.zig/archive/0ee2e521a3b96888c1029fefb2335b6076780aac.tar.gz",
-      .hash = "1220c832f1b2cca5fe49d23f44bc59b9bee591fcaf768314596243b48bf659f226d3",
+      .url = "https://github.com/MidstallSoftware/libdrm.zig/archive/e601556e8e752d18c5af4b902128503c18fdd7b1.tar.gz",
+      .hash = "1220eed85631090592bc6fde2eee30259243d064f89fe9f0eb17f18306c2587a4273",
+    },
+    .dispinf = .{
+      .url = "https://github.com/MidstallSoftware/dispinf/archive/2b102db0592b57b231801103fa0992ef671a1853.tar.gz",
+      .hash = "122069a85ff7279e154a28e4d7a8bc007cd2b42d0c12f8bf30e609cbd8c996f0ed25",
     },
   },
 }

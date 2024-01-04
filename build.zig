@@ -25,6 +25,11 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const dispinf = b.dependency("dispinf", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
     const phantom = b.dependency("phantom", .{
         .target = target,
         .optimize = optimize,
@@ -45,6 +50,10 @@ pub fn build(b: *std.Build) void {
             .{
                 .name = "libdrm",
                 .module = libdrm.module("libdrm"),
+            },
+            .{
+                .name = "dispinf",
+                .module = dispinf.module("dispinf"),
             },
         },
     });
@@ -80,6 +89,7 @@ pub fn build(b: *std.Build) void {
         unit_tests.addModule("phantom", phantom.module("phantom"));
         unit_tests.addModule("vizops", vizops.module("vizops"));
         unit_tests.addModule("libdrm", libdrm.module("libdrm"));
+        unit_tests.addModule("dispinf", dispinf.module("dispinf"));
 
         const run_unit_tests = b.addRunArtifact(unit_tests);
         step_test.dependOn(&run_unit_tests.step);
