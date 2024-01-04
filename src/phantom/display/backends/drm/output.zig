@@ -2,6 +2,7 @@ const std = @import("std");
 const vizops = @import("vizops");
 const phantom = @import("phantom");
 const Display = @import("display.zig");
+const Surface = @import("surface.zig");
 const libdrm = @import("libdrm");
 const dispinf = @import("dispinf");
 const Self = @This();
@@ -14,6 +15,7 @@ scale: vizops.vector.Float32Vector2,
 edid: ?dispinf.Edid,
 name: []const u8,
 manufacturer: ?[]const u8,
+surface: ?*Surface,
 
 pub fn new(display: *Display, node: libdrm.Node, connectorId: u32) !*Self {
     const self = try display.allocator.create(Self);
@@ -45,6 +47,7 @@ pub fn new(display: *Display, node: libdrm.Node, connectorId: u32) !*Self {
             connector.connectorTypeId,
         }),
         .manufacturer = null,
+        .surface = null,
     };
     errdefer display.allocator.free(self.name);
     errdefer {
@@ -88,15 +91,21 @@ fn impl_surfaces(ctx: *anyopaque) anyerror!std.ArrayList(*phantom.display.Surfac
     const self: *Self = @ptrCast(@alignCast(ctx));
     var surfaces = std.ArrayList(*phantom.display.Surface).init(self.display.allocator);
     errdefer surfaces.deinit();
+
+    if (self.surface) |surf| {
+        try surfaces.append(&surf.base);
+    }
     return surfaces;
 }
 
-fn impl_create_surface(ctx: *anyopaque, kind: phantom.display.Surface.Kind, _: phantom.display.Surface.Info) anyerror!*phantom.display.Surface {
+fn impl_create_surface(ctx: *anyopaque, kind: phantom.display.Surface.Kind, info: phantom.display.Surface.Info) anyerror!*phantom.display.Surface {
     const self: *Self = @ptrCast(@alignCast(ctx));
 
     if (kind != .output) return error.InvalidKind;
-    _ = self;
-    return error.NotImplemented;
+    if (self.surface) |_| return error.AlreadyExists;
+
+    self.surface = try Surface.new(self, info);
+    return &self.surface.?.base;
 }
 
 fn impl_info(ctx: *anyopaque) anyerror!phantom.display.Output.Info {
