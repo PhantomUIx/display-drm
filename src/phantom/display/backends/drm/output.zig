@@ -115,7 +115,7 @@ fn impl_info(ctx: *anyopaque) anyerror!phantom.display.Output.Info {
     }
 
     return .{
-        .enable = connector.connection > 0,
+        .enable = connector.connection == 1,
         .size = .{
             .phys = .{ .value = .{ @floatFromInt(connector.mmWidth), @floatFromInt(connector.mmHeight) } },
             .res = res,
