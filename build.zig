@@ -14,6 +14,7 @@ pub fn build(b: *std.Build) void {
     const no_docs = b.option(bool, "no-docs", "skip installing documentation") orelse false;
     const no_tests = b.option(bool, "no-tests", "skip generating tests") orelse false;
     const scene_backend = b.option(Phantom.SceneBackendType, "scene-backend", "The scene backend to use for the example") orelse .headless;
+    const use_mesa = b.option(bool, "use-mesa", "whether to use mesa's gbm as a fallback") orelse true;
 
     const vizops = b.dependency("vizops", .{
         .target = target,
@@ -28,6 +29,12 @@ pub fn build(b: *std.Build) void {
     const dispinf = b.dependency("dispinf", .{
         .target = target,
         .optimize = optimize,
+    });
+
+    const gbm = b.dependency("gbm", .{
+        .target = target,
+        .optimize = optimize,
+        .@"use-mesa" = use_mesa,
     });
 
     const phantom = b.dependency("phantom", .{
@@ -54,6 +61,10 @@ pub fn build(b: *std.Build) void {
             .{
                 .name = "dispinf",
                 .module = dispinf.module("dispinf"),
+            },
+            .{
+                .name = "gbm",
+                .module = gbm.module("gbm"),
             },
         },
     });
@@ -90,6 +101,7 @@ pub fn build(b: *std.Build) void {
         unit_tests.addModule("vizops", vizops.module("vizops"));
         unit_tests.addModule("libdrm", libdrm.module("libdrm"));
         unit_tests.addModule("dispinf", dispinf.module("dispinf"));
+        unit_tests.addModule("gbm", gbm.module("gbm"));
 
         const run_unit_tests = b.addRunArtifact(unit_tests);
         step_test.dependOn(&run_unit_tests.step);
