@@ -4,24 +4,24 @@
   .paths = .{"."},
   .dependencies = .{
     .phantom = .{
-      .url = "https://github.com/PhantomUIx/core/archive/c1fa830321b81530007511dc601b12004c7c9a33.tar.gz",
-      .hash = "122053a3b8a5f8130f40aa2b656f41e90348a876f839baddc8f9570844e0c74dc870",
+      .url = "https://github.com/PhantomUIx/core/archive/63912d18801ae6190ab4ce15d2fd8303b797d649.tar.gz",
+      .hash = "1220fcd5a5f024f9d9d40dd68c09f3a678fe73a40120d27b415156b81690cf5d91f4",
     },
     .vizops = .{
-      .url = "https://github.com/MidstallSoftware/vizops/archive/8b8499e195d8cf66e9b13ed1c80b24ee27420a29.tar.gz",
-      .hash = "1220f478cda5edf75a0b837e04c741631e4136e422b4257ccbd09d4cccaf736ac312",
+      .url = "https://github.com/MidstallSoftware/vizops/archive/75ed00f8eb217d774878fc0416d882b5ebce2b07.tar.gz",
+      .hash = "1220f72b311022cffc91f2b08f1e958bf60e1ae0c4f84b7116b1de17ddfbad9b71e3",
     },
     .libdrm = .{
-      .url = "https://github.com/MidstallSoftware/libdrm.zig/archive/e601556e8e752d18c5af4b902128503c18fdd7b1.tar.gz",
-      .hash = "1220eed85631090592bc6fde2eee30259243d064f89fe9f0eb17f18306c2587a4273",
+      .url = "https://github.com/MidstallSoftware/libdrm.zig/archive/c7461292dd9657d6b903cefe3cab8726f629fce6.tar.gz",
+      .hash = "1220a4a92c6b34b498eb6fc59d7219ea766af83175c3325850222af3cbd6915435df",
     },
     .gbm = .{
-      .url = "https://github.com/MidstallSoftware/gbm.zig/archive/08824f448a028fbb9472cf42f273a59fe91b74f7.tar.gz",
-      .hash = "1220562eaeeaf1a05cb20f3d67f214a52963e86bed42a09c7b48603fbf6684d1db3b",
+      .url = "https://github.com/MidstallSoftware/gbm.zig/archive/a6bf92079cc299e05ca35f4cf5eb97859ace00f9.tar.gz",
+      .hash = "122006dc0ab285292325e5f88315d6fb81545d2d0f0e3c13ebf5633c293e1d408313",
     },
     .dispinf = .{
-      .url = "https://github.com/MidstallSoftware/dispinf/archive/2b102db0592b57b231801103fa0992ef671a1853.tar.gz",
-      .hash = "122069a85ff7279e154a28e4d7a8bc007cd2b42d0c12f8bf30e609cbd8c996f0ed25",
+      .url = "https://github.com/MidstallSoftware/dispinf/archive/f5cc5f2be2d224370153869a39f7088d461486c9.tar.gz",
+      .hash = "12209b5e0721d2b9eaf10fcd7634455a5a4ba2edb9305a3988dd6ddffb5431107bd9",
     },
   },
 }
