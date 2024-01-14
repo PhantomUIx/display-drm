@@ -1,6 +1,7 @@
 const std = @import("std");
 const phantom = @import("phantom");
 const libdrm = @import("libdrm");
+const gbm = @import("gbm");
 const Output = @import("output.zig");
 const Self = @This();
 
@@ -9,12 +10,11 @@ output: *Output,
 fbId: u32,
 fb: ?*phantom.painting.fb.Base,
 scene: ?*phantom.scene.Base,
+gbmDevice: *gbm.Device,
 
 pub fn new(output: *Output, info: phantom.display.Surface.Info) !*Self {
     const self = try output.display.allocator.create(Self);
     errdefer output.display.allocator.destroy(self);
-
-    _ = info;
 
     self.* = .{
         .base = .{
@@ -34,15 +34,23 @@ pub fn new(output: *Output, info: phantom.display.Surface.Info) !*Self {
         .fbId = 0,
         .fb = null,
         .scene = null,
+        .gbmDevice = try gbm.Device.create(output.node),
     };
+    errdefer self.gbmDevice.destroy();
 
     const connector = try self.output.node.getConnector(self.output.connectorId);
     defer connector.deinit(self.output.display.allocator);
 
+    _ = info;
+
     if (self.output.node.getEncoder(connector.encoderId) catch null) |encoder| {
         if (self.output.node.getCrtc(encoder.crtcId) catch null) |crtc| {
-            _ = crtc;
+            std.debug.print("{}\n", .{crtc});
+        } else {
+            std.debug.print("{}\n", .{encoder});
         }
+    } else {
+        std.debug.print("{}\n", .{connector});
     }
 
     return self;
@@ -52,6 +60,7 @@ fn impl_deinit(ctx: *anyopaque) void {
     const self: *Self = @ptrCast(@alignCast(ctx));
 
     if (self.scene) |scene| scene.deinit();
+    self.gbmDevice.destroy();
     self.output.display.allocator.destroy(self);
 }
 

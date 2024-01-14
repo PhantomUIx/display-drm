@@ -15,6 +15,7 @@ pub fn build(b: *std.Build) void {
     const no_tests = b.option(bool, "no-tests", "skip generating tests") orelse false;
     const scene_backend = b.option(Phantom.SceneBackendType, "scene-backend", "The scene backend to use for the example") orelse .headless;
     const use_mesa = b.option(bool, "use-mesa", "whether to use mesa's gbm as a fallback") orelse true;
+    const use_libc = b.option(bool, "use-libc", "whether to link libc or not") orelse use_mesa;
 
     const vizops = b.dependency("vizops", .{
         .target = target,
@@ -79,6 +80,7 @@ pub fn build(b: *std.Build) void {
         },
         .target = target,
         .optimize = optimize,
+        .link_libc = use_libc,
     });
     exe_example.root_module.addImport("phantom", phantom.module("phantom"));
     exe_example.root_module.addImport("phantom.display.drm", module);
@@ -95,6 +97,7 @@ pub fn build(b: *std.Build) void {
             },
             .target = target,
             .optimize = optimize,
+            .link_libc = use_libc,
         });
 
         unit_tests.root_module.addImport("phantom", phantom.module("phantom"));

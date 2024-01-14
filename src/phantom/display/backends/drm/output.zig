@@ -76,7 +76,9 @@ pub fn new(display: *Display, node: libdrm.Node, connectorId: u32) !*Self {
                 blob.getAllocated(node.fd, display.allocator) catch continue;
                 defer blob.deinit(display.allocator);
 
-                self.edid = dispinf.Edid.initBuffer(blob.data().?) catch null;
+                if (blob.data()) |data| {
+                    self.edid = dispinf.Edid.initBuffer(data) catch null;
+                }
             }
         }
     }
