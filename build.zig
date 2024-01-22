@@ -7,7 +7,7 @@ pub const phantomModule = Phantom.Sdk.PhantomModule{
     },
 };
 
-pub fn build(b: *std.Build) void {
+pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
     const no_importer = b.option(bool, "no-importer", "disables the import system (not recommended)") orelse false;
@@ -42,9 +42,28 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .@"no-importer" = no_importer,
+        .@"no-docs" = no_docs,
+        .@"import-module" = try Phantom.Sdk.ModuleImport.init(&.{
+            .{
+                .name = "vizops",
+                .module = vizops.module("vizops"),
+            },
+            .{
+                .name = "libdrm",
+                .module = libdrm.module("libdrm"),
+            },
+            .{
+                .name = "dispinf",
+                .module = dispinf.module("dispinf"),
+            },
+            .{
+                .name = "gbm",
+                .module = gbm.module("gbm"),
+            },
+        }, b.pathFromRoot("src"), b.allocator),
     });
 
-    const module = b.addModule("phantom.display.drm", .{
+    _ = b.addModule("phantom.display.drm", .{
         .root_source_file = .{ .path = b.pathFromRoot("src/phantom.zig") },
         .imports = &.{
             .{
@@ -83,7 +102,6 @@ pub fn build(b: *std.Build) void {
         .link_libc = use_libc,
     });
     exe_example.root_module.addImport("phantom", phantom.module("phantom"));
-    exe_example.root_module.addImport("phantom.display.drm", module);
     exe_example.root_module.addImport("options", exe_options.createModule());
     exe_example.root_module.addImport("vizops", vizops.module("vizops"));
     b.installArtifact(exe_example);
@@ -91,20 +109,7 @@ pub fn build(b: *std.Build) void {
     if (!no_tests) {
         const step_test = b.step("test", "Run all unit tests");
 
-        const unit_tests = b.addTest(.{
-            .root_source_file = .{
-                .path = b.pathFromRoot("src/phantom.zig"),
-            },
-            .target = target,
-            .optimize = optimize,
-            .link_libc = use_libc,
-        });
-
-        unit_tests.root_module.addImport("phantom", phantom.module("phantom"));
-        unit_tests.root_module.addImport("vizops", vizops.module("vizops"));
-        unit_tests.root_module.addImport("libdrm", libdrm.module("libdrm"));
-        unit_tests.root_module.addImport("dispinf", dispinf.module("dispinf"));
-        unit_tests.root_module.addImport("gbm", gbm.module("gbm"));
+        const unit_tests = phantom.artifact("test");
 
         const run_unit_tests = b.addRunArtifact(unit_tests);
         step_test.dependOn(&run_unit_tests.step);

@@ -4,12 +4,6 @@ const options = @import("options");
 const phantom = @import("phantom");
 const vizops = @import("vizops");
 
-pub const phantomOptions = struct {
-    pub const displayBackends = struct {
-        pub const drm = @import("phantom.display.drm").display.backends.drm;
-    };
-};
-
 const alloc = if (builtin.link_libc) std.heap.c_allocator else std.heap.page_allocator;
 
 pub fn main() !void {
